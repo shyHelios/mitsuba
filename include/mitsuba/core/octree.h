@@ -20,6 +20,8 @@
 #if !defined(__MITSUBA_CORE_OCTREE_H_)
 #define __MITSUBA_CORE_OCTREE_H_
 
+#include <functional>
+
 #include <mitsuba/mitsuba.h>
 #include <mitsuba/core/atomic.h>
 #include <mitsuba/core/timer.h>

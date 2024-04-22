@@ -24,6 +24,7 @@
 #include <mitsuba/core/lock.h>
 #include <boost/static_assert.hpp>
 #include <stack>
+#include <functional>
 
 #if defined(__LINUX__)
 #include <malloc.h>

@@ -20,6 +20,8 @@
 #if !defined(__MITSUBA_CORE_KDTREE_H_)
 #define __MITSUBA_CORE_KDTREE_H_
 
+#include <functional>
+
 #include <mitsuba/core/aabb.h>
 #include <mitsuba/core/timer.h>
 
@@ -272,8 +274,8 @@ public:
     };
 
     /// Comparison functor for nearest-neighbor search queries
-    struct SearchResultComparator : public
-        std::binary_function<SearchResult, SearchResult, bool> {
+    struct SearchResultComparator : public std::binary_function<SearchResult, SearchResult, bool>
+    {
     public:
         inline bool operator()(const SearchResult &a, const SearchResult &b) const {
             return a.distSquared < b.distSquared;
