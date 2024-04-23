@@ -436,29 +436,6 @@ def enable_modules(self, modules, debug=False, crosscompiling=False) :
                 try : self.AppendUnique(CPPDEFINES=moduleDefines[module])
                 except: pass
         debugSuffix = ''
-        if (sys.platform=='darwin' or sys.platform.startswith('linux2')) and not crosscompiling :
-                if debug : debugSuffix = '_debug'
-                for module in modules :
-                        if module not in pclessModules : continue
-                        self.AppendUnique(LIBS=[module+debugSuffix])
-                        self.AppendUnique(LIBPATH=[os.path.join("$QTDIR","lib")])
-                        self.AppendUnique(CPPPATH=[os.path.join("$QTDIR","include","qt5")])
-                        self.AppendUnique(CPPPATH=[os.path.join("$QTDIR","include","qt5",module)])
-                pcmodules = [module+debugSuffix for module in modules if module not in pclessModules ]
-                if 'QtDBus' in pcmodules:
-                        self.AppendUnique(CPPPATH=[os.path.join("$QTDIR","include","qt5","QtDBus")])
-                if "QtAssistant" in pcmodules:
-                        self.AppendUnique(CPPPATH=[os.path.join("$QTDIR","include","qt5","QtAssistant")])
-                        pcmodules.remove("QtAssistant")
-                        pcmodules.append("QtAssistantClient")
-                if sys.platform.startswith('linux'):
-                        self.ParseConfig('pkg-config %s --libs --cflags'% ' '.join(pcmodules))
-                elif sys.platform == 'darwin':
-                        for module in pcmodules:
-                                #self.AppendUnique(CPPPATH="$QTDIR/frameworks/%s.framework/Versions/5/Headers" % module)
-                                self.Append(LINKFLAGS=['-framework', module])
-                self["QT5_MOCCPPPATH"] = self["CPPPATH"]
-                return
         if sys.platform == "win32" or crosscompiling :
                 modules_libs = [m[:2]+'5'+m[2:] for m in modules]
                 if crosscompiling:

@@ -15,5 +15,3 @@ libbidir = bidirEnv.SharedLibrary('mitsuba-bidir', [
 
 env.Append(LIBPATH=[os.path.join(env['BUILDDIR'], 'libbidir')])
 
-if sys.platform == "darwin":
-        bidirEnv.AddPostAction(libbidir, 'install_name_tool -id @rpath/libmitsuba-bidir.dylib $TARGET')

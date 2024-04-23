@@ -10,6 +10,10 @@ plugins += env.SharedLibrary('roughdielectric', ['roughdielectric.cpp'])
 plugins += env.SharedLibrary('roughconductor', ['roughconductor.cpp'])
 plugins += env.SharedLibrary('roughplastic', ['roughplastic.cpp'])
 
+mb_env = env.Clone()
+mb_env['CPPPATH'].append('E:/Code/3rdlibs/glm/include')
+# plugins += mb_env.SharedLibrary('mbsmith', ['mbsmith/Heitz/MicrosurfaceScattering.cpp'], LIBS=['glm'], LIBPATH=['E:/Code/3rdlibs/glm/lib'])
+
 # Materials that act as modifiers
 plugins += env.SharedLibrary('twosided', ['twosided.cpp'])
 plugins += env.SharedLibrary('mask', ['mask.cpp'])

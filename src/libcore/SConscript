@@ -49,17 +49,10 @@ libcore_objects = [
 ]
 
 # Add some platform-specific components
-if sys.platform == 'darwin':
-        coreEnv_osx = coreEnv.Clone()
-        coreEnv_osx.ConfigureForObjectiveCPP()
-        libcore_objects += coreEnv_osx.SharedObject('platform_darwin.mm')
-elif sys.platform == 'win32':
+if sys.platform == 'win32':
         libcore_objects += coreEnv.SharedObject('getopt.c')
 
 libcore = coreEnv.SharedLibrary('mitsuba-core', libcore_objects)
-
-if sys.platform == "darwin":
-        coreEnv.AddPostAction(libcore, 'install_name_tool -id @rpath/libmitsuba-core.dylib $TARGET')
 
 env.Append(LIBS=['mitsuba-core'])
 env.Append(LIBPATH=[os.path.join(env['BUILDDIR'], 'libcore')])

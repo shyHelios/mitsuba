@@ -6,11 +6,6 @@ for ver in hasPython:
         python_libdir = list(env['PYTHON'+sver+'LIBDIR']) if ('PYTHON'+sver+'LIBDIR') in env else []
         python_lib = list(env['PYTHON'+sver+'LIB']) if ('PYTHON'+sver+'LIB') in env else []
 
-        if 'linux' in sys.platform:
-                # On Linux, don't link to the core Python library. The associated symbols will be resolved
-                # when the plugin is imported into a running interpreter
-                python_lib = [ lib for lib in python_lib if not lib.startswith('python') ]
-
         pythonEnv = env.Clone()
         pythonEnv.Prepend(CPPPATH=python_include)
         pythonEnv.Prepend(LIBPATH=python_libdir)
@@ -30,26 +25,9 @@ for ver in hasPython:
         if 'XERCESLIB' in pythonEnv:
                 pythonEnv.Prepend(LIBS=pythonEnv['XERCESLIB'])
 
-        if sys.platform != 'win32':
-                # Python has serious aliasing issues. Disable -fstrict-aliasing only for this library
-                pythonEnv.Append(CXXFLAGS = ['-fno-strict-aliasing'])
-                pythonEnv.RemoveFlags(['-fstrict-aliasing', '-ftree-vectorize'])
-        else:
-                # Create an OBJ file with many addressable sections (or compilation may fail on Windows)
-                pythonEnv.Append(CPPFLAGS = ['/bigobj'])
-
-        if sys.platform == 'darwin':
-                pythonEnv.Append(LINKFLAGS=['-Xlinker', '-rpath', '-Xlinker', '@loader_path/../../Contents/Frameworks', '-undefined', 'dynamic_lookup'])
-        elif 'linux' in sys.platform:
-                # Linux: ensure that all core Mitsuba libraries are loaded when the plugin is used in Python
-                pythonEnv.Append(SHLINKFLAGS=['-Wl,-R,\'$$ORIGIN/../..\''])
-                pythonEnv.Append(SHLINKFLAGS=['-Wl,-no-as-needed', '-lmitsuba-hw', '-Wl,-no-as-needed', '-lmitsuba-bidir'])
+        # Create an OBJ file with many addressable sections (or compilation may fail on Windows)
+        pythonEnv.Append(CPPFLAGS = ['/bigobj'])
 
         libcore_obj = pythonEnv.SharedObject('core_'+ver, 'core.cpp')
         librender_obj = pythonEnv.SharedObject('render_'+ver, 'render.cpp')
         libpython = pythonEnv.SharedLibrary('mitsuba_python'+ver, [libcore_obj, librender_obj])
-
-        if sys.platform == 'darwin':
-                env.AddPostAction(libpython, 'strip -u -r $TARGET')
-        elif 'linux' in sys.platform:
-                env.AddPostAction(libpython, 'strip $TARGET')
