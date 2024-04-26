@@ -1,0 +1,43 @@
+<scene version="0.6.0">
+
+    <default name="spp" value="16" />
+    <default name="resx" value="960" />
+    <default name="resy" value="960" />
+
+    <integrator type="path" />
+    <sensor type="perspective">
+        <string name="fovAxis" value="x" />
+        <float name="fov" value="39.597755" />
+        <float name="nearClip" value="0.100000" />
+        <float name="farClip" value="100.000000" />
+        <transform name="toWorld">
+            <rotate x="1" angle="-153.5592908827048" />
+            <rotate y="1" angle="-46.691938147394204" />
+            <rotate z="1" angle="-179.999991348578" />
+            <translate x="7.358891" y="4.958309" z="6.925791" />
+        </transform>
+        <sampler type="ldsampler" name="sampler">
+            <integer name="sampleCount" value="$spp" />
+        </sampler>
+        <film type="hdrfilm" name="film">
+            <integer name="width" value="$resx" />
+            <integer name="height" value="$resy" />
+        </film>
+    </sensor>
+
+    <emitter type="constant">
+        <rgb name="radiance" value="0.5" />
+    </emitter>
+
+    <bsdf type="mbsmithdielectric" id="white-furnace-bsdf">
+        <string name="material" value="none" />
+        <string name="distribution" value="ggx" />
+        <float name="alpha" value="1" />
+    </bsdf>
+
+    <shape type="ply">
+        <string name="filename" value="meshes/Sphere.ply" />
+        <boolean name="faceNormals" value="true" />
+        <ref id="white-furnace-bsdf" />
+    </shape>
+</scene>

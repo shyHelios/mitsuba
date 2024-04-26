@@ -23,7 +23,7 @@ if sys.platform == 'win32':
         winstubs += [ env.SharedObject('#data/windows/wmain_stub.cpp') ]
         Export('winstubs')
 
-def build(scriptFile, exports = [], duplicate = 0):
+def build(scriptFile, exports = [], duplicate = False):
         dirname = '/'.join(os.path.dirname(scriptFile).split('/')[1:])
         return SConscript(scriptFile, exports,
                 variant_dir=os.path.join(env['BUILDDIR'], dirname), duplicate=duplicate)

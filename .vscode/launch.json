@@ -1,0 +1,58 @@
+{
+    "configurations": [
+        {
+            "name": "matpreview",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/dist/mitsuba.exe",
+            "args": [
+                "${workspaceFolder}/scenes/matpreview/matpreview.xml"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "D:/Programs/CLion/bin/gdb/win/x64/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "whitefurnace",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/dist/mitsuba.exe",
+            "args": [
+                "${workspaceFolder}/scenes/white_furnace/white_furnace.xml"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "D:/Programs/CLion/bin/gdb/win/x64/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}

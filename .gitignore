@@ -48,3 +48,5 @@ mitsuba.*.log
 .settings
 .cproject
 .project
+
+data/windows/*.obj
