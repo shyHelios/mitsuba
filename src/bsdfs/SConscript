@@ -10,11 +10,6 @@ plugins += env.SharedLibrary('roughdielectric', ['roughdielectric.cpp'])
 plugins += env.SharedLibrary('roughconductor', ['roughconductor.cpp'])
 plugins += env.SharedLibrary('roughplastic', ['roughplastic.cpp'])
 
-import os
-Export('env', 'plugins')
-script_file = 'mbsmith/Heitz/SConscript'
-SConscript(script_file, variant_dir='#build/release/bsdf/mbsmith/Heitz', duplicate=False)
-
 # Materials that act as modifiers
 plugins += env.SharedLibrary('twosided', ['twosided.cpp'])
 plugins += env.SharedLibrary('mask', ['mask.cpp'])
