@@ -6,10 +6,10 @@
             "request": "launch",
             "program": "${workspaceFolder}/dist/mitsuba.exe",
             "args": [
-                "${workspaceFolder}/scenes/matpreview/matpreview.xml"
+                "${workspaceFolder}/scenes/matpreview/scene_test_diffuse.xml"
             ],
             "stopAtEntry": false,
-            "cwd": "${fileDirname}",
+            "cwd": "${fileDirname}",//当前打开的文件所在的目录
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
@@ -33,7 +33,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/dist/mitsuba.exe",
             "args": [
-                "${workspaceFolder}/scenes/white_furnace/white_furnace.xml"
+                "${workspaceFolder}/scenes/white_furnace/scene_whitefurnace_conductor.xml"
             ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

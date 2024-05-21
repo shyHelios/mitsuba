@@ -1,4 +1,5 @@
 Import('env', 'plugins')
+Export('env', 'plugins')
 
 # Basic library of smooth and rough materials
 plugins += env.SharedLibrary('diffuse', ['diffuse.cpp'])
@@ -33,5 +34,11 @@ plugins += env.SharedLibrary('thindielectric', ['thindielectric.cpp'])
 irawanEnv = env.Clone()
 irawanEnv.RelaxCompilerSettings()
 plugins += irawanEnv.SharedLibrary('irawan', ['irawan.cpp'])
+
+# paper materials
+# Heitz, E., Hanika, J., d’Eon, E., Dachsbacher, C. 2016. Multiple-Scattering Microfacet BSDFs with the Smith Model. 
+plugins += env.SharedLibrary('roughconductorGGX', ['roughconductorGGX.cpp'])
+plugins += env.SharedLibrary('roughdielectricGGX', ['roughdielectricGGX.cpp'])
+plugins += env.SharedLibrary('roughdiffuseGGX', ['roughdiffuseGGX.cpp'])
 
 Export('plugins')

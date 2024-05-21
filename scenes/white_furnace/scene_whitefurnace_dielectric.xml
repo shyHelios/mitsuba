@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<scene version="0.6.0">
+	<integrator type="path">
+		<integer name="maxDepth" value="-1"/>
+	</integrator>
+
+	<emitter type="constant">
+		<spectrum name="radiance" value="0.8"/>
+	</emitter>
+
+    <shape type="cube">
+        <transform name="toWorld">
+        	<scale x=".7" y=".7" z=".02"/>         	
+        	<rotate x="1" angle="110"/>
+        	<rotate y="1" angle="45"/>
+            <translate x="0" y="0.26" z="0"/>
+        </transform>
+        
+		<bsdf type="roughdielectricGGX">
+			<float name="alphaU" value="1.0"/>
+			<float name="alphaV" value="1.0"/>
+			<integer name="scatteringOrderMax" value="10"/>
+		</bsdf>
+    </shape>
+
+
+	<sensor type="perspective">
+		<float name="fov" value="45"/>
+		<string name="fovAxis" value="x"/>
+		
+		<transform name="toWorld">
+			<lookat origin="1.5, 1.5, 1.5" target="0, 0, 0" up="0, 1, 0"/> </transform>
+		<float name="fov" value="45"/>
+
+		<sampler type="independent">
+			<integer name="sampleCount" value="256"/>
+		</sampler>
+
+		<film type="ldrfilm">
+			<string name="fileFormat" value="jpeg"/>
+			<boolean name="banner" value="false"/>
+			<integer name="height" value="512"/>
+			<integer name="width" value="512"/>
+			<rfilter type="mitchell"/>
+		</film>
+	</sensor>
+
+</scene>
