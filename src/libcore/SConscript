@@ -1,5 +1,5 @@
 Import('env', 'sys', 'os')
-
+        
 # Core library environment with OpenEXR, libpng and libjpeg
 coreEnv = env.Clone()
 if 'OEXRLIBDIR' in coreEnv:
@@ -53,6 +53,5 @@ if sys.platform == 'win32':
         libcore_objects += coreEnv.SharedObject('getopt.c')
 
 libcore = coreEnv.SharedLibrary('mitsuba-core', libcore_objects)
-
 env.Append(LIBS=['mitsuba-core'])
 env.Append(LIBPATH=[os.path.join(env['BUILDDIR'], 'libcore')])

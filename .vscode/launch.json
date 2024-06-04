@@ -4,12 +4,12 @@
             "name": "matpreview",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/dist/mitsuba.exe",
+            "program": "${workspaceFolder}/dist/release/mitsuba.exe",
             "args": [
                 "${workspaceFolder}/scenes/matpreview/scene_test_diffuse.xml"
             ],
             "stopAtEntry": false,
-            "cwd": "${fileDirname}",//当前打开的文件所在的目录
+            "cwd": "${fileDirname}", //当前打开的文件所在的目录
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
@@ -31,9 +31,36 @@
             "name": "whitefurnace",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/dist/mitsuba.exe",
+            "program": "${workspaceFolder}/dist/release/mitsuba.exe",
             "args": [
-                "${workspaceFolder}/scenes/white_furnace/scene_whitefurnace_conductor.xml"
+                "${workspaceFolder}/scenes/white_furnace/scene_whitefurnace_conductor.xml",
+            ],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "D:/Programs/CLion/bin/gdb/win/x64/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "roughconductor",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/dist/release/mitsuba.exe",
+            "args": [
+                "${workspaceFolder}/scenes/scene_test_conductor_new_release.xml"
             ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

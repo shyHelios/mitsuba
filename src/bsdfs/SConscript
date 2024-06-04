@@ -41,4 +41,6 @@ plugins += env.SharedLibrary('roughconductorGGX', ['roughconductorGGX.cpp'])
 plugins += env.SharedLibrary('roughdielectricGGX', ['roughdielectricGGX.cpp'])
 plugins += env.SharedLibrary('roughdiffuseGGX', ['roughdiffuseGGX.cpp'])
 
+plugins += env.SharedLibrary('roughconductor_mb_new_release', ['roughconductor_mb_new_release.cpp'])
+
 Export('plugins')

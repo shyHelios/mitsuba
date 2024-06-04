@@ -14,6 +14,7 @@ Export('SCons', 'sys', 'os', 'glob', 'resources',
 # Configure the build framework
 env = SConscript('build/SConscript.configure')
 
+
 Export('env')
 
 if sys.platform == 'win32':
