@@ -328,6 +328,7 @@ public:
 
             return m_specularReflectance->eval(bRec.its) * value;
         } else {
+            /* eta=出/入 */
             Float eta = Frame::cosTheta(bRec.wi) > 0.0f ? m_eta : m_invEta;
 
             /* Calculate the total amount of transmission */

@@ -159,7 +159,7 @@ public:
 
         /**
          * The goal of the medium sampling weight is to be able to
-         * sample medium intarctions according to
+         * sample medium interactions according to
          *    sigma_s(t) * tau(0 <-> t)
          * as opposed to
          *    sigma_t(t) * tau(0 <-> t)
@@ -275,6 +275,7 @@ public:
     bool sampleDistance(const Ray &ray, MediumSamplingRecord &mRec,
             Sampler *sampler) const {
         Float rand = sampler->next1D(), sampledDistance;
+        // 这里的samplingDensity是根据采样策略选取的某个sigma_t
         Float samplingDensity = m_samplingDensity;
 
         if (rand < m_mediumSamplingWeight) {

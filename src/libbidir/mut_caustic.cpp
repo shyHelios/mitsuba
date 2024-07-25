@@ -60,8 +60,10 @@ Mutator::EMutationType CausticPerturbation::getType() const {
 }
 
 Float CausticPerturbation::suitability(const Path &path) const {
+    // path首尾两个点都是空点，没有实际含义，因此,k-1是相机上的顶点，1是光源上的点
     int k = path.length(), m = k - 1, l = m - 1;
 
+    
     if (k < 4 || !path.vertex(l)->isConnectable())
         return false;
 

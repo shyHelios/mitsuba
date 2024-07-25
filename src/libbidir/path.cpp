@@ -266,6 +266,7 @@ bool Path::operator==(const Path &path) const {
 Float Path::miWeight(const Scene *scene, const Path &emitterSubpath,
         const PathEdge *connectionEdge, const Path &sensorSubpath,
         int s, int t, bool sampleDirect, bool lightImage) {
+    // k是边数(连起来后)，n是顶点数
     int k = s+t+1, n = k+1;
 
     const PathVertex
@@ -285,6 +286,7 @@ Float Path::miWeight(const Scene *scene, const Path &emitterSubpath,
           *isNull      = (bool *)  alloca(n * sizeof(bool));
 
     /* Keep track of which vertices are connectable / null interactions */
+    // 按顺序记录从光源到相机的每个顶点的相关属性
     int pos = 0;
     for (int i=0; i<=s; ++i) {
         const PathVertex *v = emitterSubpath.vertex(i);

@@ -173,7 +173,7 @@ Spectrum PathEdge::evalCached(const PathVertex *pred, const PathVertex *succ,
        it works. It might be worth to change the caching scheme to make this function
        simpler in a future revision */
     Spectrum result(1.0f);
-
+    // length为0表示是super node和sensor sample/emitter sample之间的边
     if (length == 0) {
         if (what & EValueImp)
             result *= pred->weight[EImportance] * pred->pdf[EImportance];
@@ -195,6 +195,7 @@ Spectrum PathEdge::evalCached(const PathVertex *pred, const PathVertex *succ,
         }
 
         if (what & EValueRad) {
+            // pdf是对面积的pdf，需要转换成对立体角的
             Float tmp = succ->pdf[ERadiance];
             if (succ->isConnectable()) {
                 tmp *= length * length;

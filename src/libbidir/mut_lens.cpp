@@ -61,10 +61,12 @@ Mutator::EMutationType LensPerturbation::getType() const {
 Float LensPerturbation::suitability(const Path &path) const {
     int k = path.length(), m = k - 1, l = m-1;
 
+    // 从相机开始寻找第一个能够连接的顶点的下标(如diffuse表面顶点)
     while (l >= 0 && !path.vertex(l)->isConnectable())
         --l;
+    // 得到第一个能够连接的顶点的上一个顶点
     --l;
-
+    // 
     return (l >= 0 && path.vertex(l)->isConnectable()
             && path.vertex(l+1)->isConnectable()) ? 1.0f : 0.0f;
 }
@@ -95,6 +97,7 @@ bool LensPerturbation::sampleMutation(
 
     const PerspectiveCamera *sensor = static_cast<const PerspectiveCamera *>(m_scene->getSensor());
 
+    // 构造从lens出发的ray，无论是针孔相机还是thinlens，ray原点都设置为相机空间原点
     Ray ray;
     if (sensor->sampleRay(ray, proposalSamplePosition, Point2(0.5f), 0.0f).isZero())
         return false;
@@ -119,6 +122,7 @@ bool LensPerturbation::sampleMutation(
         proposal.append(m_pool.allocVertex());
     }
     proposal.append(m_pool.allocEdge());
+    // sensor supernode，lens上的点以及这两个点之间的连边不变，直接加进去即可
     proposal.append(source.vertex(m)->clone(m_pool));
     proposal.append(source.edge(m));
     proposal.append(source.vertex(k));
@@ -178,6 +182,7 @@ Float LensPerturbation::Q(const Path &source, const Path &proposal,
         const MutationRecord &muRec) const {
     int m = muRec.m, l = muRec.l;
 
+    // 补上连接处两个顶点weight和它们的连边的weight，剩下要考虑的weight就只剩参与perturbation的顶点和连边了
     Spectrum weight = muRec.weight *
         proposal.edge(l)->evalCached(proposal.vertex(l), proposal.vertex(l+1),
             PathEdge::EEverything);
