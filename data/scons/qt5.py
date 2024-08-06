@@ -44,16 +44,16 @@ import SCons.Scanner
 import SCons.Tool
 import SCons.Util
 
-class ToolQtWarning(SCons.Warnings.Warning):
-        pass
+# class ToolQtWarning(SCons.Warnings.warn):
+#         pass
 
-class GeneratedMocFileNotIncluded(ToolQtWarning):
-        pass
+# class GeneratedMocFileNotIncluded(ToolQtWarning):
+#         pass
 
-class QtdirNotFound(ToolQtWarning):
-        pass
+# class QtdirNotFound(ToolQtWarning):
+#         pass
 
-SCons.Warnings.enableWarningClass(ToolQtWarning)
+# SCons.Warnings.enableWarningClass(ToolQtWarning)
 
 qrcinclude_re = re.compile(r'<file>([^<]*)</file>', re.M)
 
@@ -72,6 +72,7 @@ cxx_suffixes = [".c", ".cxx", ".cpp", ".cc"]
 def checkMocIncluded(target, source, env):
         moc = target[0]
         cpp = source[0]
+
         # looks like cpp.includes is cleared before the build stage :-(
         # not really sure about the path transformations (moc.cwd? cpp.cwd?) :-/
         path = SCons.Defaults.CScan.path_function(env, moc.cwd)
