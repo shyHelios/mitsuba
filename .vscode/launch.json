@@ -2,84 +2,70 @@
     "configurations": [
         {
             "name": "matpreview",
-            "type": "cppdbg",
+            "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/dist/release/mitsuba.exe",
+            "program": "${workspaceFolder}/dist/debug/mitsuba.exe",
             "args": [
-                "${workspaceFolder}/scenes/matpreview/scene_test_diffuse.xml"
+                "${workspaceFolder}/scenes/matpreview/matpreview.xml",
+                // "-p",
+                // "1"
             ],
             "stopAtEntry": false,
-            "cwd": "${fileDirname}", //当前打开的文件所在的目录
+            "cwd": "${workspaceFolder}", //当前打开的文件所在的目录
             "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "miDebuggerPath": "D:/Programs/CLion/bin/gdb/win/x64/bin/gdb.exe",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                },
-                {
-                    "description": "Set Disassembly Flavor to Intel",
-                    "text": "-gdb-set disassembly-flavor intel",
-                    "ignoreFailures": true
-                }
-            ]
+            "console": "integratedTerminal",
         },
         {
             "name": "whitefurnace",
-            "type": "cppdbg",
+            "type": "cppvsdbg",
             "request": "launch",
             "program": "${workspaceFolder}/dist/release/mitsuba.exe",
             "args": [
                 "${workspaceFolder}/scenes/white_furnace/scene_whitefurnace_conductor.xml",
             ],
             "stopAtEntry": false,
-            "cwd": "${fileDirname}",
+            "cwd": "${workspaceFolder}",
             "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "miDebuggerPath": "D:/Programs/CLion/bin/gdb/win/x64/bin/gdb.exe",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                },
-                {
-                    "description": "Set Disassembly Flavor to Intel",
-                    "text": "-gdb-set disassembly-flavor intel",
-                    "ignoreFailures": true
-                }
-            ]
+            "externalConsole": false
         },
         {
             "name": "roughconductor",
-            "type": "cppdbg",
+            "type": "cppvsdbg",
             "request": "launch",
             "program": "${workspaceFolder}/dist/release/mitsuba.exe",
             "args": [
                 "${workspaceFolder}/scenes/scene_test_conductor_new_release.xml"
             ],
             "stopAtEntry": false,
-            "cwd": "${fileDirname}",
+            "cwd": "${workspaceFolder}",
             "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "miDebuggerPath": "D:/Programs/CLion/bin/gdb/win/x64/bin/gdb.exe",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                },
-                {
-                    "description": "Set Disassembly Flavor to Intel",
-                    "text": "-gdb-set disassembly-flavor intel",
-                    "ignoreFailures": true
-                }
-            ]
+            "externalConsole": false
+        },
+        {
+            "name": "chandelier",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/dist/debug/mitsuba.exe",
+            "args": [
+                "${workspaceFolder}/scenes/chandelier.xml"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "torus",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/dist/release/mitsuba.exe",
+            "args": [
+                "${workspaceFolder}/scenes/torus/torus.xml"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "console": "integratedTerminal"
         }
     ]
 }

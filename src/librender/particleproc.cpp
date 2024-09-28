@@ -198,6 +198,8 @@ void ParticleTracer::process(const WorkUnit *workUnit, WorkResult *workResult,
                 const BSDF *bsdf = its.getBSDF();
 
                 /* Forward the surface scattering event to the attached handler */
+                // 在diffuse或glossy表面上记录一个photon，photon停止要么是出场景了，要么由于RR
+                // photon的weight要考虑初始power以及经过的路径的throughput
                 handleSurfaceInteraction(depth, nullInteractions, delta, its, medium, throughput*power);
 
                 BSDFSamplingRecord bRec(its, m_sampler, EImportance);

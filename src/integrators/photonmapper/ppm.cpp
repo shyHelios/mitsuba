@@ -79,7 +79,7 @@ public:
         Intersection its;
         Float radius;
         Spectrum weight, flux, emission;
-        Point2 sample;
+        Point2 sample; // 该Gather Point关联的像素坐标(连续)
         Float N;
         int depth;
 
@@ -202,6 +202,7 @@ public:
         int blockSize = scene->getBlockSize();
         int blocksW = (cropSize.x + blockSize - 1) / blockSize;
         int blocksH = (cropSize.y + blockSize - 1) / blockSize;
+        // 把渲染区域分成多个block，一个block是一个work unit
         m_workUnits.resize(blocksW*blocksH);
 
         /* Create gather points in blocks so that gathering can be parallelized later on */
@@ -266,6 +267,9 @@ public:
         return true;
     }
 
+    // 初始情况是穿过某个像素的某个位置的一条ray，遇到glossy或diffuse表面生成一个Gather
+    // Point并停下，遇到specualr表面生成一个Gather Point后继续递归传播。只有glossy或diffuse表面生成的Gather
+    // Point才会加入最终的 Gather Points集合gatherPoints中。
     int createGatherPoints(Scene *scene, const RayDifferential &ray,
             const Point2 &sample, Sampler *sampler, const Spectrum &weight,
             std::vector<GatherPoint> &gatherPoints, int depth) {
@@ -326,6 +330,9 @@ public:
         ref<Scheduler> sched = Scheduler::getInstance();
 
         /* Generate the global photon map */
+        // mitsuba中遇到这种proc只要找到这个类中的createWorkProcessor返回的类里的process方法即可
+        // 这里是找GatherPhotonWorker，它调用ParticleTracer::process，GatherPhotonWorker重写其中的
+        // handle*系列方法
         ref<GatherPhotonProcess> proc = new GatherPhotonProcess(
             GatherPhotonProcess::EAllSurfacePhotons, m_photonCount,
             m_granularity, m_maxDepth == -1 ? -1 : (m_maxDepth-1), m_rrDepth, true,
@@ -408,6 +415,7 @@ private:
     Float m_initialRadius, m_alpha;
     int m_photonCount, m_granularity;
     int m_maxDepth, m_rrDepth;
+    // m_totalEmissions：总共射出了多少个粒子；m_totalPhotons：
     size_t m_totalEmissions, m_totalPhotons;
     int m_blockSize;
     bool m_running;

@@ -230,6 +230,7 @@ public:
             #pragma omp parallel for schedule(dynamic)
         #endif
         for (int i=0; i<(int) m_gatherBlocks.size(); ++i) {
+            // 拿到一个image block的Gather Points集合(每个像素一个Gather Point)
             std::vector<GatherPoint> &gatherPoints = m_gatherBlocks[i];
             #if defined(MTS_OPENMP)
                 Sampler *sampler = static_cast<Sampler *>(samplers[mts_omp_get_thread_num()]);
@@ -247,6 +248,7 @@ public:
                         continue;
                     Point2 apertureSample, sample;
                     Float timeSample = 0.0f;
+                    // 拿到当前像素的Gather Point
                     GatherPoint &gatherPoint = gatherPoints[index++];
                     gatherPoint.pos = Point2i(xofs + xofsInt, yofs + yofsInt);
                     sampler->generate(gatherPoint.pos);
@@ -329,6 +331,7 @@ public:
         sched->wait(proc);
 
         ref<PhotonMap> photonMap = proc->getPhotonMap();
+        // 所有photon都加进PhotonMap后调用build方法在其内部构建KDTree
         photonMap->build();
         Log(EDebug, "Photon map full. Shot " SIZE_T_FMT " particles, excess photons due to parallelism: "
             SIZE_T_FMT, proc->getShotParticles(), proc->getExcessPhotons());

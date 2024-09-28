@@ -37,10 +37,10 @@ plugins += irawanEnv.SharedLibrary('irawan', ['irawan.cpp'])
 
 # paper materials
 # Heitz, E., Hanika, J., d’Eon, E., Dachsbacher, C. 2016. Multiple-Scattering Microfacet BSDFs with the Smith Model. 
-plugins += env.SharedLibrary('roughconductorGGX', ['roughconductorGGX.cpp'])
-plugins += env.SharedLibrary('roughdielectricGGX', ['roughdielectricGGX.cpp'])
-plugins += env.SharedLibrary('roughdiffuseGGX', ['roughdiffuseGGX.cpp'])
+# plugins += env.SharedLibrary('roughconductorGGX', ['roughconductorGGX.cpp'])
+# plugins += env.SharedLibrary('roughdielectricGGX', ['roughdielectricGGX.cpp'])
+# plugins += env.SharedLibrary('roughdiffuseGGX', ['roughdiffuseGGX.cpp'])
 
-plugins += env.SharedLibrary('roughconductor_mb_new_release', ['roughconductor_mb_new_release.cpp'])
+# plugins += env.SharedLibrary('roughconductor_mb_new_release', ['roughconductor_mb_new_release.cpp'])
 
 Export('plugins')

@@ -91,5 +91,8 @@ build('src/integrators/SConscript')
 # Testcases
 build('src/tests/SConscript')
 
+# micrograin
+build('src/devplugins/SConscript')
+
 # ===== Move everything to its proper place =====
 SConscript('build/SConscript.install')

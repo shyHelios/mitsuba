@@ -108,9 +108,9 @@ void Sensor::configure() {
 }
 
 Spectrum Sensor::sampleRayDifferential(RayDifferential &ray,
-        const Point2 &samplePosition,
-        const Point2 &apertureSample,
-        Float timeSample) const {
+                                       const Point2 &samplePosition, // 对于相机来说，这就是像素坐标(连续坐标)
+                                       const Point2 &apertureSample, Float timeSample) const
+{
     Spectrum result = sampleRay(ray, samplePosition,
         apertureSample, timeSample);
 

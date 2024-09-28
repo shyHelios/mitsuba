@@ -1,0 +1,5 @@
+Import('env', 'plugins')
+
+plugins += env.SharedLibrary('micrograin', ['micrograin.cpp'])
+
+Export('plugins')

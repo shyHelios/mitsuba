@@ -182,12 +182,14 @@ public:
 
         if (bRec.component == -1) {
             size_t entry;
+            // 先根据weight决定采样哪个分量
             if (sample.x < weights[0]) {
                 entry = 0; sample.x /= weights[0];
             } else {
                 entry = 1; sample.x = (sample.x - weights[0]) / weights[1];
             }
 
+            // 计算f值存储到result中，计算pdf值存储到pdf中
             Float pdf;
             Spectrum result = m_bsdfs[entry]->sample(bRec, pdf, sample);
             if (result.isZero()) // sampling failed

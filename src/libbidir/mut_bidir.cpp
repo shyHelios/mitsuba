@@ -52,7 +52,7 @@ bool BidirectionalMutator::sampleMutation(
        is done using a two-tailed geometric distribution that is
        centered around the current path length, and which respects
        the specified minimum and maximum length constraints. */
-
+    // kPrime是采样得到的proposal路径长度
     desiredLength.configure(k, m_kmin, m_kmax);
     int kPrime = desiredLength.sample(m_sampler->next1D());
 
@@ -63,7 +63,7 @@ bool BidirectionalMutator::sampleMutation(
 
        When k==kPrime, we must delete *something*, or the mutation
        is trivial, hence the conditional below expression. */
-
+    // 采样删除的边数，1代表不删除任何边，因此在k==kPrime时，如果不做特殊处理不会得到新路径，需要至少删2条才行
     int minDeletion = std::max((k == kPrime) ? 2 : 1, k-kPrime+1);
     deletionLength.configure(2, minDeletion, k);
     int kd = deletionLength.sample(m_sampler->next1D());
@@ -90,7 +90,7 @@ bool BidirectionalMutator::sampleMutation(
     }
     if (m_temp.size() == 0)
         return false;
-
+    // source路径从[l, m]被删掉，注意，l，m节点本身保留，这里的l距离光源更近
     int l = m_temp[std::min((int) (m_temp.size() *
             m_sampler->next1D()), (int) m_temp.size()-1)];
     int m = l+kd;
@@ -126,16 +126,19 @@ bool BidirectionalMutator::sampleMutation(
     proposal.vertex(l) = proposal.vertex(l)->clone(m_pool);
 
     /* Perform a random walk from the emitter direction */
+    // 从顶点l出发采样s个点
     if (proposal.randomWalk(m_scene, m_sampler, s, -1, EImportance, m_pool) != s) {
         proposal.release(l, proposal.vertexCount(), m_pool);
         return false;
     }
 
     /* Perform a random walk from the sensor direction */
+    // 从顶点m出发采样t个点
     m_tempPath.clear();
-    m_tempPath.append(source, m, k+1, true);
+    // reverse置为true，是反向添加，即添加完后为k~m
+    m_tempPath.append(source, m, k+1, true); 
     m_tempPath.vertex(k-m) = m_tempPath.vertex(k-m)->clone(m_pool);
-
+    
     if (m_tempPath.randomWalk(m_scene, m_sampler, t, -1, ERadiance, m_pool) != t) {
         proposal.release(l, proposal.vertexCount(), m_pool);
         m_tempPath.release(k-m, m_tempPath.vertexCount(), m_pool);
@@ -144,6 +147,7 @@ bool BidirectionalMutator::sampleMutation(
 
     PathEdge *connectionEdge = m_pool.allocEdge();
     proposal.append(connectionEdge);
+    // 这里把temppath中采样得到的k~m+t顶点反向加进proposal中
     proposal.append(m_tempPath, 0, m_tempPath.vertexCount(), true);
 
     BDAssert(proposal.length() == kPrime &&

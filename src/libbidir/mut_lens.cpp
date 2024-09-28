@@ -191,7 +191,7 @@ Float LensPerturbation::Q(const Path &source, const Path &proposal,
         const PathVertex *v0 = proposal.vertex(i-1),
               *v1 = proposal.vertex(i);
         const PathEdge *edge = proposal.edge(i-1);
-
+        // 注意这里都没有带pdf，求的都是f*cos
         weight *= edge->evalCached(v0, v1,
             PathEdge::ETransmittance |
             (i != m ? PathEdge::EValueCosineRad : 0));

@@ -294,6 +294,8 @@ public:
         }
 
         ref<ReplayableSampler> rplSampler = new ReplayableSampler();
+
+        // separateDirect为true时不生成长度小于等于2(至多一次bounce)的路径，后续luminance估计也会去除直接光照部分
         ref<PathSampler> pathSampler = new PathSampler(PathSampler::EBidirectional, scene,
             rplSampler, rplSampler, rplSampler, m_config.maxDepth, 10,
             m_config.separateDirect, true);
@@ -302,6 +304,9 @@ public:
         ref<MLTProcess> process = new MLTProcess(job, queue,
                 m_config, directImage, pathSeeds);
 
+        // generateSeeds使用luminanceSamples个双向路径追踪样本计算图片的平均亮度
+        // 然后以每条路径的亮度作为离散pdf，采样得到workUnits条seed路径，workUnits可以理解为线程数
+        // 无论线程数是多少，最终的mutation次数是可以计算得到的(mutation是指尝试mutate的次数，不是实际完成的次数)
         m_config.luminance = pathSampler->generateSeeds(luminanceSamples,
             m_config.workUnits, true, m_config.importanceMap, pathSeeds);
 

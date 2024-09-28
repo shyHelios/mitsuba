@@ -648,6 +648,14 @@ Float fresnelDielectric(Float cosThetaI, Float cosThetaT, Float eta) {
     return 0.5f * (Rs * Rs + Rp * Rp);
 }
 
+/**
+ * @brief 计算dielectric材质的fresnel项
+ *
+ * @param cosThetaI_ 入射方向和surface法向夹角余弦
+ * @param cosThetaT_ 折射方向和surface法向夹角余弦
+ * @param eta 内部折射率/外部折射率(和入射方向在哪个半球无关)
+ * @return
+ */
 Float fresnelDielectricExt(Float cosThetaI_, Float &cosThetaT_, Float eta) {
     if (EXPECT_NOT_TAKEN(eta == 1)) {
         cosThetaT_ = -cosThetaI_;
