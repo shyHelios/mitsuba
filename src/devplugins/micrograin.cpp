@@ -32,7 +32,6 @@ public:
     Micrograin(const Properties &props) : BSDF(props)
     {
         ref<FileResolver> fResolver = Thread::getThread()->getFileResolver();
-        m_specularReflectance = new ConstantSpectrumTexture(props.getSpectrum("specularReflectance", Spectrum(1.0f)));
 
         m_linear_blend = props.getBoolean("linearBlend", true);
 
@@ -127,23 +126,13 @@ public:
 
     Micrograin(Stream *stream, InstanceManager *manager) : BSDF(stream, manager)
     {
-        // m_specularReflectance = static_cast<Texture *>(manager->getInstance(stream));
-        // m_eta                 = Spectrum(stream);
-        // m_k                   = Spectrum(stream);
-
-        // configure();
     }
 
     void configure()
     {
         /* Verify the input parameters and fix them if necessary */
-        m_specularReflectance = ensureEnergyConservation(m_specularReflectance, "specularReflectance", 1.0f);
-
-        m_usesRayDifferentials = m_specularReflectance->usesRayDifferentials();
-
         m_components.clear();
-        m_components.push_back(EDeltaReflection | EFrontSide |
-                               (m_specularReflectance->isConstant() ? 0 : ESpatiallyVarying));
+        m_components.push_back(EDeltaReflection | EFrontSide);
 
         BSDF::configure();
     }
@@ -151,23 +140,11 @@ public:
     void serialize(Stream *stream, InstanceManager *manager) const
     {
         BSDF::serialize(stream, manager);
-        manager->serialize(stream, m_specularReflectance.get());
         // m_eta.serialize(stream);
         // m_k.serialize(stream);
     }
 
-    void addChild(const std::string &name, ConfigurableObject *child)
-    {
-        if (child->getClass()->derivesFrom(MTS_CLASS(Texture)) && name == "specularReflectance")
-        {
-            m_specularReflectance = static_cast<Texture *>(child);
-            m_usesRayDifferentials |= m_specularReflectance->usesRayDifferentials();
-        }
-        else
-        {
-            BSDF::addChild(name, child);
-        }
-    }
+    void addChild(const std::string &name, ConfigurableObject *child) { BSDF::addChild(name, child); }
 
     Float D_ggx(Float alpha_sqr, Float cos_theta) const
     {
@@ -493,6 +470,8 @@ public:
             ((bRec.component != -1 && bRec.component != 0) || !(bRec.typeMask & EGlossyReflection)))
             return 0.0f;
 
+        ++pdfCnt;
+
         Vector wh         = normalize(bRec.wo + bRec.wi);
         Float cos_theta_h = math::clamp(Frame::cosTheta(wh), 0.0f, 1.0f);
         Float cos_theta_o = math::clamp(Frame::cosTheta(bRec.wo), 0.0f, 1.0f);
@@ -500,37 +479,11 @@ public:
         Float beta_sqr    = m_beta * m_beta;
         Float alpha_sqr   = m_alpha * m_alpha;
 
-        Float pdf_s;
-        if (m_is_conductor_s)
-        {
-            // 太小了，一般都可以约等于零
-            pdf_s = D_our(m_tau_0, beta_sqr, cos_theta_h) * cos_theta_h / (4 * absDot(bRec.wo, wh));
-        }
-        else
-        {
-            pdf_s = (warp::squareToCosineHemispherePdf(bRec.wo) +
-                     D_our(m_tau_0, beta_sqr, cos_theta_h) * cos_theta_h / (4 * absDot(bRec.wo, wh))) *
-                    0.5f;
-        }
+        // 太小了，一般都可以约等于零
+        Float pdf_s = D_our(m_tau_0, beta_sqr, cos_theta_h) * cos_theta_h / (4 * absDot(bRec.wo, wh));
 
-        Float pdf_b;
-        if (m_is_conductor_b)
-        {
-            MicrofacetDistribution distr(MicrofacetDistribution::EGGX, m_alpha);
-            pdf_b = distr.eval(wh) * distr.smithG1(bRec.wi, wh) / (4.0f * Frame::cosTheta(bRec.wi));
-        }
-        else
-        {
-            MicrofacetDistribution distr(MicrofacetDistribution::EGGX, m_alpha);
-            pdf_b = (warp::squareToCosineHemispherePdf(bRec.wo) +
-                     distr.eval(wh) * distr.smithG1(bRec.wi, wh) / (4.0f * Frame::cosTheta(bRec.wi))) *
-                    0.5f;
-        }
-
-        // side check
-        // Log(EInfo, "pdf_b: %f, pdf_s: %f", pdf_b, pdf_s);
-        // pdf_s = math::clamp(pdf_s, 0.f, 1.f);
-        // pdf_b = math::clamp(pdf_b, 0.f, 1.f);
+        MicrofacetDistribution distr(MicrofacetDistribution::EGGX, m_alpha);
+        Float pdf_b = distr.eval(wh) * distr.smithG1(bRec.wi, wh) / (4.0f * Frame::cosTheta(bRec.wi));
 
         if (m_linear_blend)
             return math::lerp(m_tau_0, pdf_b, pdf_s);
@@ -607,7 +560,7 @@ public:
         bRec.sampledType      = EGlossyReflection;
 
         Spectrum numerator(this->eval(bRec, ESolidAngle));
-        Float pdf    = this->pdf(bRec, ESolidAngle);
+        Float pdf = this->pdf(bRec, ESolidAngle);
         if (pdf == 0.f)
             return Spectrum(0.f);
         Spectrum res = numerator / pdf;
@@ -638,17 +591,12 @@ public:
     std::string toString() const override
     {
         std::ostringstream oss;
-        oss << "Micrograin[" << endl
-            << "  id = \"" << getID() << "\"," << endl
-            << "  specularReflectance = " << indent(m_specularReflectance->toString()) << endl
-            << "]";
+        oss << "Micrograin[" << endl << "  id = \"" << getID() << "\"," << endl << "]";
         return oss.str();
     }
 
     MTS_DECLARE_CLASS()
 private:
-    ref<Texture> m_specularReflectance;
-
     // porous层和dielectric层是否做linear blend？
     bool m_linear_blend;
 

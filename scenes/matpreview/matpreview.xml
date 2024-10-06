@@ -1,5 +1,5 @@
 <scene version="0.6.0">
-    <integrator type="path" />
+    <integrator type="path"/>
 
     <shape type="serialized">
         <string name="filename" value="matpreview.serialized" />
@@ -14,8 +14,8 @@
 
             <boolean name="conductorS" value="true"/>
             <string name="materialS" value="Au"/>
-            <float name="beta" value="0.0"/>
-            <float name="tau0" value="0.07"/>
+            <float name="beta" value="0.7"/>
+            <float name="tau0" value="0.98"/>
 
             <boolean name="conductorB" value="true"/>
             <float name="alpha" value="1.0"/>
@@ -31,7 +31,7 @@
         </transform>
 
         <sampler type="ldsampler">
-            <integer name="sampleCount" value="64" />
+            <integer name="sampleCount" value="256" />
         </sampler>
 
         <film type="hdrfilm" id="film">

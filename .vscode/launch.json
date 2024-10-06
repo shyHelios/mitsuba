@@ -7,8 +7,6 @@
             "program": "${workspaceFolder}/dist/debug/mitsuba.exe",
             "args": [
                 "${workspaceFolder}/scenes/matpreview/matpreview.xml",
-                // "-p",
-                // "1"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}", //当前打开的文件所在的目录
@@ -19,9 +17,9 @@
             "name": "whitefurnace",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/dist/release/mitsuba.exe",
+            "program": "${workspaceFolder}/dist/debug/mitsuba.exe",
             "args": [
-                "${workspaceFolder}/scenes/white_furnace/scene_whitefurnace_conductor.xml",
+                "${workspaceFolder}/scenes/white_furnace/white_furnace.xml",
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
